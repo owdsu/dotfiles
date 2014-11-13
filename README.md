@@ -1,4 +1,3 @@
-dotfiles
-========
+## Installation ##
 
-Dotfiles in my home dir on GNU/Linux Debian
+    curl -s https://raw.githubusercontent.com/owdsu/dotfiles/master/install.sh | sh
