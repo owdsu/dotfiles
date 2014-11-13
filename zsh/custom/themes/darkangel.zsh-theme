@@ -15,6 +15,34 @@ GIT_DIRTY_COLOR=$FG[133]
 GIT_CLEAN_COLOR=$FG[118]
 GIT_PROMPT_COLOR=$FG[075]
 
+get_advice() {
+    local tmp_file="/tmp/fucking-great-advice.txt"
+    local advice
+    local need_update
+    if [ -f "$tmp_file" ]; then
+        update_period=600
+        last_update=$(stat -c "%Y" ${tmp_file})
+        time_now=$(date +%s)
+        need_update=$(echo "(${time_now}-${last_update}) >= ${update_period}" | bc)
+        if [ "$need_update" -eq 1 ]; then
+            rm -f $tmp_file
+        fi
+    else
+        need_update=1
+    fi
+    if [ "$need_update" -eq 1 ]; then
+        advice=$(echo -en $(curl --max-time 2 -s  http://fucking-great-advice.ru/api/random | awk -F \" '{print $8}') | sed 's/\&nbsp;/ /g; s/\&#151;/—/g')
+		if [ "$?" -eq "0" ]; then
+			echo "${advice}" > $tmp_file
+		elif [ -f "${tmp_file}" ]; then
+			advice=$(cat "$tmp_file")
+		fi
+    fi
+    if [ -n "$advice" ]; then
+        echo -n " ${BRACKETS_COLOR}[${PROMPT_FAILURE_COLOR}${advice}${BRACKETS_COLOR}]${reset_color}"
+    fi
+}
+
 # Check SSH
 if [[ -n "$SSH_CLIENT" || -n "$SSH2_CLIENT" ]]; then
     HOST_NAME_COLOR=$FG[227]    # SSH
@@ -37,7 +65,7 @@ DIR_PROMPT="%{$BRACKETS_COLOR%}[%{$PROMPT_DIR_COLOR%}%/%{$BRACKETS_COLOR%}]%{$re
 USER_PROMPT="%{$USER_NAME_COLOR%}%n%{$AT_COLOR%}@%{$HOST_NAME_COLOR%}$HOST_NAME%{$reset_color%}"
 
 #PROMPT='%{$BRACKETS_COLOR%}┌─${USER_PROMPT} ${DIR_PROMPT} %{$GIT_PROMPT_COLOR%}$(git_prompt_info)%{$GIT_DIRTY_COLOR%}$(git_prompt_status) %{$reset_color%}
-PROMPT='%{$BRACKETS_COLOR%}┌─${USER_PROMPT} ${DIR_PROMPT} %{$GIT_PROMPT_COLOR%}$(git_prompt_info)%{$reset_color%}
+PROMPT='%{$BRACKETS_COLOR%}┌─${USER_PROMPT} ${DIR_PROMPT} %{$GIT_PROMPT_COLOR%}$(git_prompt_info)%{$reset_color%} $(get_advice)
 %{$BRACKETS_COLOR%}└─$USER_NAME_COLOR%}%#%{$reset_color%} '
 
 RPS1="${return_code}%{$BRACKETS_COLOR%}[%{$TIME_COLOR%}%T%{$BRACKETS_COLOR%}]%{$reset_color%}"
