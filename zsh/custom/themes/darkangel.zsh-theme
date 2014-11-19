@@ -16,7 +16,7 @@ GIT_CLEAN_COLOR=$FG[118]
 GIT_PROMPT_COLOR=$FG[075]
 
 get_advice() {
-    local tmp_file="/tmp/fucking-great-advice.txt"
+    local tmp_file="/tmp/${USER}_fucking-great-advice.txt"
     local advice
     local need_update
     if [ -f "$tmp_file" ]; then
