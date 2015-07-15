@@ -5,6 +5,10 @@ case "$TERM" in
     'Eterm') TERM=Eterm-256color;;
 esac
 
+export RAILS_ENV="production"
+export PATH="$HOME/.rbenv/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11"
+eval "$(rbenv init -)"
+
 PAGER=less
 export PAGER
 
