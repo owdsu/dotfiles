@@ -123,7 +123,7 @@ for FILE in .zlogin .zshenv .zshrc; do
     if [ -f "$INSTALLDIR/$FILE" ]; then
         rename_date "$INSTALLDIR/$FILE"
     fi
-    ln -s "$INSTALLDIR/$DOTFILEDIR/zsh/$FILE" "$INSTALLDIR/$FILE"
+    echo "source $INSTALLDIR/$DOTFILEDIR/zsh/$FILE" >> "$INSTALLDIR/$FILE"
 done
 
 ZSH="$INSTALLDIR/$DOTFILEDIR/zsh/oh-my-zsh"
