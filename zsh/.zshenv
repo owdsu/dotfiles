@@ -29,3 +29,11 @@ export PAGER
 
 EDITOR=vim
 export EDITOR
+
+export MANPAGER="/bin/sh -c \"unset MANPAGER;col -b -x | \
+                 view -R \
+                      -c 'set ft=man nomod nolist' \
+                      -c 'set nonumber' \
+                      -c 'map q :q<CR>' \
+                      -c 'map <SPACE> <C-F>' -c 'map b <C-U>' \
+                      -c 'nmap K :Man <C-R>=expand(\\\"<cword>\\\")<CR><CR>' -\""
