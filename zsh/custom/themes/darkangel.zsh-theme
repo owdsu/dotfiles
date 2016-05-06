@@ -43,6 +43,14 @@ get_advice() {
     fi
 }
 
+function virtualenv_info(){
+  [[ -n ${VIRTUAL_ENV} ]] || return
+  echo "${VIRTUAL_ENV:t}"
+}
+
+# disables prompt mangling in virtual_env/bin/activate
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
 # Check SSH
 if [[ -n "$SSH_CLIENT" || -n "$SSH2_CLIENT" ]]; then
     HOST_NAME_COLOR=$FG[227]    # SSH
@@ -65,7 +73,7 @@ DIR_PROMPT="%{$BRACKETS_COLOR%}[%{$PROMPT_DIR_COLOR%}%/%{$BRACKETS_COLOR%}]%{$re
 USER_PROMPT="%{$USER_NAME_COLOR%}%n%{$AT_COLOR%}@%{$HOST_NAME_COLOR%}$HOST_NAME%{$reset_color%}"
 
 #PROMPT='%{$BRACKETS_COLOR%}┌─${USER_PROMPT} ${DIR_PROMPT} %{$GIT_PROMPT_COLOR%}$(git_prompt_info)%{$GIT_DIRTY_COLOR%}$(git_prompt_status) %{$reset_color%}
-PROMPT='%{$BRACKETS_COLOR%}┌─${USER_PROMPT} ${DIR_PROMPT} %{$GIT_PROMPT_COLOR%}$(git_prompt_info)%{$reset_color%} $(get_advice)
+PROMPT='%{$BRACKETS_COLOR%}┌─${USER_PROMPT} ${DIR_PROMPT} %{$GIT_PROMPT_COLOR%}$(git_prompt_info)%{$reset_color%} %{$BRACKETS_COLOR%}[%{$AT_COLOR%}$(virtualenv_info)%{$BRACKETS_COLOR%}]%{$reset_color%} $(get_advice)
 %{$BRACKETS_COLOR%}└─$USER_NAME_COLOR%}%#%{$reset_color%} '
 
 RPS1="${return_code}%{$BRACKETS_COLOR%}[%{$TIME_COLOR%}%T%{$BRACKETS_COLOR%}]%{$reset_color%}"
