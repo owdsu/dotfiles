@@ -1,6 +1,7 @@
 
 if [ $TERM != "screen-256color" ] && [ $TERM != "screen" ]; then
-    tmux attach -t ssh || tmux -u -2 new-session -d -s ssh; tmux attach -t ssh
+    ( (tmux has-session -t ssh && tmux attach-session -t ssh) || (tmux -u -2 new-session -s ssh) ) && exit 0
+    echo "tmux failed to start"
 fi
 
 ttyctl -f  # freeze the terminal modes... can't change without a ttyctl -u
