@@ -7,7 +7,7 @@ esac
 
 export RAILS_ENV="production"
 
-PATH="$HOME/.rbenv/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games"
+PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games"
 
 if which rbenv > /dev/null 2>&1; then
     PATH="$HOME/.rbenv/bin:$PATH"
