@@ -16,6 +16,9 @@ GIT_CLEAN_COLOR=$FG[118]
 GIT_PROMPT_COLOR=$FG[075]
 
 get_advice() {
+    if [ "$ZSH_ADVICE" != "yes" -a "$ZSH_ADVICE" != "true" ]; then
+        return
+    fi
     local tmp_file="/tmp/${USER}_fucking-great-advice.txt"
     local advice
     local need_update
@@ -45,7 +48,8 @@ get_advice() {
 
 function virtualenv_info(){
   [[ -n ${VIRTUAL_ENV} ]] || return
-  echo "${VIRTUAL_ENV:t}"
+
+  echo -n " ${BRACKETS_COLOR}[${AT_COLOR}${VIRTUAL_ENV:t}${BRACKETS_COLOR}]${reset_color}"
 }
 
 # disables prompt mangling in virtual_env/bin/activate
@@ -73,7 +77,7 @@ DIR_PROMPT="%{$BRACKETS_COLOR%}[%{$PROMPT_DIR_COLOR%}%/%{$BRACKETS_COLOR%}]%{$re
 USER_PROMPT="%{$USER_NAME_COLOR%}%n%{$AT_COLOR%}@%{$HOST_NAME_COLOR%}$HOST_NAME%{$reset_color%}"
 
 #PROMPT='%{$BRACKETS_COLOR%}┌─${USER_PROMPT} ${DIR_PROMPT} %{$GIT_PROMPT_COLOR%}$(git_prompt_info)%{$GIT_DIRTY_COLOR%}$(git_prompt_status) %{$reset_color%}
-PROMPT='%{$BRACKETS_COLOR%}┌─${USER_PROMPT} ${DIR_PROMPT} %{$GIT_PROMPT_COLOR%}$(git_prompt_info)%{$reset_color%} %{$BRACKETS_COLOR%}[%{$AT_COLOR%}$(virtualenv_info)%{$BRACKETS_COLOR%}]%{$reset_color%} $(get_advice)
+PROMPT='%{$BRACKETS_COLOR%}┌─${USER_PROMPT} ${DIR_PROMPT} %{$GIT_PROMPT_COLOR%}$(git_prompt_info)%{$reset_color%}$(virtualenv_info)$(get_advice)
 %{$BRACKETS_COLOR%}└─$USER_NAME_COLOR%}%#%{$reset_color%} '
 
 RPS1="${return_code}%{$BRACKETS_COLOR%}[%{$TIME_COLOR%}%T%{$BRACKETS_COLOR%}]%{$reset_color%}"
